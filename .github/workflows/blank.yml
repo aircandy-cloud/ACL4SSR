@@ -1,0 +1,21 @@
+name: Sync upstream
+
+on:
+  schedule:
+    - cron:  '*/5 * * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone master branch from current repository
+        uses: actions/checkout@v2
+        with:
+          ref: 'master'
+          fetch-depth: 0
+      - name: Reset to upstream branch and push
+        run: |
+          git remote add upstream https://github.com/ACL4SSR/ACL4SSR.git
+          git fetch upstream
+          git reset --hard upstream/master
+          git push -f origin master
